@@ -1,0 +1,37 @@
+:root{
+  --primary-color:#fff;
+  --secondary-color:#333;
+}
+
+
+.marked{
+  text-decoration: line-through;
+}
+
+.list-container{
+  padding:4px 10px;
+}
+
+.list-container .list-item{
+  padding:4px 10px;
+  line-height: 24px;
+  font-size: 16px;
+  font-family: 'Exo 2', sans-serif;
+}
+
+.small-divider{
+  width:5%;
+  height:1px;
+  background:var(--secondary-color);
+  opacity: 0.12;
+  margin:10px 0;
+}
+
+
+.w-85{
+  width:85%;
+}
+
+.task-entry-container{
+  padding:0px 20px;
+}
