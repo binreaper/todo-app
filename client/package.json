@@ -7,12 +7,16 @@
     "build": "yarn clean && yarn parcel:build",
     "parcel:build": "npx parcel build src/index.html",
     "watch": "npx parcel src/index.html",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "start": "node browser.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-inliner": "^1.0.14"
+  },
+  "dependencies": {
+    "listener.js": "binreaper/listener.js"
   }
 }

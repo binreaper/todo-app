@@ -1,49 +1,46 @@
+import Listener from '../../../../../sid/listener';
+
 import mount from './mount.js';
 import List from './List.js';
 import Input from './Input.js';
-import PubSub from './pubsub.js';
 import Button from './Button.js';
-import db from './db.js';
 
 function main() {
-
   try {
-    const pubSub = new PubSub();
+    const listener = new Listener();
 
     let listStorage = [];
 
     readFromStorage();
 
     function addToStorage(data) {
-      return db.tasks.add(data).then(() => readFromStorage());
+      localStorage.setItem('listTaks',JSON.stringify(listStorage));
     }
 
     function readFromStorage() {
-      return db.tasks.filter(x=>true).toArray().then(data => {
-        listStorage = data;
-        update();
-      });
+      listStorage = JSON.parse(localStorage.getItem('listTasks')) || [];
+      update();
     }
 
     function clearCompletedFromStorage() {
-      return db.tasks.where({ 'marked': 1 }).toArray()
-        .then(records => {
-          const marked = records.map(item => item.id);
-          return db.tasks.bulkDelete(marked);
-        })
-        .then(() => readFromStorage());
+      listStorage  = listStorage.filter(item=>!item.marked);
+      addToStorage(listStorage);
+      update();
     }
 
     function toggleRead(id) {
-      return db.tasks.where({ id: id }).toArray()
-        .then(records => {
-          return db.tasks.update(id, { marked: records[0].marked ? 0 : 1 });
-        })
-        .then(() => readFromStorage());
+      listStorage = listStorage.map(item=>{
+        if(item.id === id){
+          item.marked = true;
+        }
+        return item;
+      });
+
+      addToStorage();
     }
 
     function update() {
-      pubSub.publish('UPDATE');
+      listener.shout('UPDATE');
     }
 
     function render() {
@@ -95,7 +92,7 @@ function main() {
     }
 
 
-    const subToUpdate = pubSub.subscribe('UPDATE', () => {
+    listener.listen('UPDATE', () => {
       mount(render());
     });
 
@@ -105,8 +102,6 @@ function main() {
     console.log(err);
     throw err;
   }
-
-
 }
 
 

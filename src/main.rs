@@ -1,16 +1,21 @@
+extern crate web_view;
+
 use web_view::*;
 
 fn main() {
     let html_content = include_str!("../client/dist/index.html");
 
-    web_view::builder()
-        .title("My Project")
+    let mut webview = web_view::builder()
+        .title("Tasks")
         .content(Content::Html(html_content))
-        .size(320, 480)
+        // .content(Content::Url("http://localhost:1234"))
+        .size(500, 300)
         .resizable(false)
         .debug(true)
         .user_data(())
         .invoke_handler(|_webview, _arg| Ok(()))
-        .run()
+        .build()
         .unwrap();
+    webview.set_color((255, 255, 255));
+    webview.run().unwrap();
 }
