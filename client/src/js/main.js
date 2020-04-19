@@ -14,7 +14,8 @@ function main() {
     readFromStorage();
 
     function addToStorage(data) {
-      localStorage.setItem('listTaks',JSON.stringify(listStorage));
+      localStorage.setItem('listTasks',JSON.stringify(listStorage));
+      readFromStorage();
     }
 
     function readFromStorage() {
@@ -25,18 +26,19 @@ function main() {
     function clearCompletedFromStorage() {
       listStorage  = listStorage.filter(item=>!item.marked);
       addToStorage(listStorage);
+      readFromStorage();
       update();
     }
 
     function toggleRead(id) {
       listStorage = listStorage.map(item=>{
         if(item.id === id){
-          item.marked = true;
+          item.marked = !item.marked;
         }
         return item;
       });
-
       addToStorage();
+      readFromStorage();
     }
 
     function update() {
@@ -56,11 +58,12 @@ function main() {
         placeholder: "What\'s on your mind?",
         onKeyUp: (e) => {
           if (e.keyCode === 13) {
-            addToStorage({
+            listStorage.push({
               id: listStorage.length,
               content: e.target.value,
               marked: 0
             });
+            addToStorage();
           }
         },
       });
